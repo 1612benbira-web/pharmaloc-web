@@ -1,0 +1,9 @@
+.topnav { display: flex; gap: 1rem; margin-right: auto; margin-left: 1.5rem; }
+.topnav a { color: var(--muted); font-weight: 600; text-decoration: none; }
+.topnav a.active { color: var(--green-dark); }
+.box { padding: .85rem 1rem; background: var(--card); border: 1px solid var(--line); border-radius: 8px; display: flex; flex-direction: column; gap: .75rem; }
+.box h2 { font-size: 1rem; margin: 0; }
+.devbox { border-style: dashed; }
+.code { font-size: 2rem; letter-spacing: .3em; font-weight: 700; color: var(--green-dark); margin: 0; }
+select { font: inherit; padding: .65rem .75rem; border: 1px solid var(--line); border-radius: 6px; background: var(--card); }
+.inline { display: flex; gap: .5rem; flex-wrap: wrap; }

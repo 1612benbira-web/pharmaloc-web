@@ -1,0 +1,9 @@
+.tabs { display: flex; gap: .25rem; border-bottom: 1px solid var(--line); }
+.tabs a { padding: .6rem 1rem; text-decoration: none; color: var(--muted); font-weight: 600; border-bottom: 3px solid transparent; margin-bottom: -1px; }
+.tabs a.active { color: var(--green-dark); border-bottom-color: var(--green); }
+.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: .75rem; }
+.panel { display: flex; flex-direction: column; gap: 1.25rem; margin-top: .75rem; padding-top: .75rem; border-top: 1px solid var(--line); }
+.panel form { display: flex; flex-direction: column; gap: .75rem; }
+.panel h2 { font-size: 1rem; margin: 0; }
+.items { margin: .25rem 0; padding-left: 1.1rem; }
+.ok-text { color: var(--green-dark); font-weight: 600; margin: 0; }
