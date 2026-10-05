@@ -6,10 +6,13 @@ import Availability from "./pages/Availability.jsx";
 import OrderPage from "./pages/OrderPage.jsx";
 import MyOrders from "./pages/MyOrders.jsx";
 import Deliveries from "./pages/Deliveries.jsx";
-import Placeholder from "./pages/Placeholder.jsx";
 import PharmacyLayout from "./pages/PharmacyLayout.jsx";
 import PharmacyOrders from "./pages/PharmacyOrders.jsx";
 import PharmacyStocks from "./pages/PharmacyStocks.jsx";
+import AdminLayout from "./pages/AdminLayout.jsx";
+import AdminMedicines from "./pages/AdminMedicines.jsx";
+import AdminPharmacies from "./pages/AdminPharmacies.jsx";
+import AdminUsers from "./pages/AdminUsers.jsx";
 import "./orders.css";
 
 // Page d'accueil de chaque rôle.
@@ -74,7 +77,11 @@ export default function App() {
       </Route>
 
       <Route element={<Guard roles={["admin"]} />}>
-        <Route path="/admin" element={<Placeholder title="Administration" text="La gestion des comptes, du catalogue et des pharmacies arrivera plus tard." />} />
+        <Route element={<AdminLayout />}>
+          <Route path="/admin" element={<AdminMedicines />} />
+          <Route path="/admin/pharmacies" element={<AdminPharmacies />} />
+          <Route path="/admin/comptes" element={<AdminUsers />} />
+        </Route>
       </Route>
 
       <Route path="*" element={<Navigate to={user ? HOME[user.role] : "/connexion"} replace />} />
