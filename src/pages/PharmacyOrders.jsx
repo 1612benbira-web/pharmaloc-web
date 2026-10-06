@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { api, errorText } from "../api.js";
+import { useAuth } from "../auth.jsx";
 
 const ACTIVE = ["CONFIRMED", "PREPARING", "READY", "OUT_FOR_DELIVERY"];
 const LABEL = { CONFIRMED: "À préparer", PREPARING: "En préparation", READY: "Prête", OUT_FOR_DELIVERY: "En livraison" };
@@ -17,8 +18,10 @@ function nextAction(o) {
 const WAITING = { READY: "En attente d'un livreur", OUT_FOR_DELIVERY: "Le livreur est en route" };
 
 export default function PharmacyOrders() {
+  const { user } = useAuth();
   const [orders, setOrders] = useState(null);
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
   const [busyId, setBusyId] = useState(null);
 
   const load = useCallback(async () => {
@@ -51,10 +54,29 @@ export default function PharmacyOrders() {
     }
   }
 
+  // Annulation d'une commande déjà payée (responsable seulement) : produits remis en stock, client remboursé.
+  async function cancelPaid(order) {
+    const reason = window.prompt("Motif de l'annulation (5 caractères minimum). Le client sera remboursé et les produits remis en stock :");
+    if (reason === null) return;
+    setBusyId(order._id);
+    setError("");
+    setNotice("");
+    try {
+      const { data } = await api(`/orders/${order._id}/cancel-paid`, { method: "POST", body: { reason: reason.trim() } });
+      setNotice(data.message);
+    } catch (err) {
+      setError(errorText(err));
+    } finally {
+      await load();
+      setBusyId(null);
+    }
+  }
+
   return (
     <section className="stack">
       <h1>Commandes à traiter</h1>
       {error && <p role="alert" className="error">{error}</p>}
+      {notice && <p role="status" className="ok-text">{notice}</p>}
       {orders === null && !error && <p className="muted">Chargement…</p>}
       {orders && orders.length === 0 && (
         <p className="muted">Aucune commande à traiter pour le moment. La liste se met à jour toute seule.</p>
@@ -85,6 +107,9 @@ export default function PharmacyOrders() {
                 </button>
               )}
               {waiting && <span className="hint">{WAITING[o.status]}</span>}
+              {user.role === "pharmacy_manager" && o.status !== "OUT_FOR_DELIVERY" && (
+                <div><button className="link" disabled={busyId === o._id} onClick={() => cancelPaid(o)}>Annuler et rembourser</button></div>
+              )}
             </li>
           );
         })}
