@@ -40,5 +40,11 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  return <AuthContext.Provider value={{ user, loading, login, register, logout }}>{children}</AuthContext.Provider>;
+  // Relit le profil (par exemple après le changement du mot de passe provisoire).
+  const refresh = useCallback(async () => {
+    const { data } = await api("/auth/me");
+    setUser(data.user);
+  }, []);
+
+  return <AuthContext.Provider value={{ user, loading, login, register, logout, refresh }}>{children}</AuthContext.Provider>;
 }

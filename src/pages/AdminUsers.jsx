@@ -35,7 +35,7 @@ export default function AdminUsers() {
   async function create(e) {
     e.preventDefault();
     const body = { name: f.name.trim(), email: f.email.trim(), password: f.password, role: f.role, pharmacies: f.role === "admin" ? [] : [f.pharmacy] };
-    const ok = await run(() => api("/admin/users", { method: "POST", body }), "Compte créé. Communiquez le mot de passe à son titulaire de façon sûre.");
+    const ok = await run(() => api("/admin/users", { method: "POST", body }), "Compte créé. Communiquez le mot de passe provisoire à son titulaire de façon sûre : il devra le changer à sa première connexion.");
     if (ok) setF(empty);
   }
   const set = (key) => (e) => setF({ ...f, [key]: e.target.value });

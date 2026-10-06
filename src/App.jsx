@@ -1,6 +1,7 @@
-import { Navigate, NavLink, Outlet, Route, Routes } from "react-router-dom";
+import { Navigate, NavLink, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { useAuth } from "./auth.jsx";
 import AuthPage from "./pages/AuthPage.jsx";
+import Account from "./pages/Account.jsx";
 import Search from "./pages/Search.jsx";
 import Availability from "./pages/Availability.jsx";
 import OrderPage from "./pages/OrderPage.jsx";
@@ -17,6 +18,7 @@ import "./orders.css";
 
 // Page d'accueil de chaque rôle.
 const HOME = { patient: "/rechercher", pharmacist: "/pharmacie", pharmacy_manager: "/pharmacie", courier: "/livraisons", admin: "/admin" };
+const ALL_ROLES = Object.keys(HOME);
 
 function Layout() {
   const { user, logout } = useAuth();
@@ -34,7 +36,7 @@ function Layout() {
           </nav>
         )}
         <div className="who">
-          <span>{user.name}</span>
+          <NavLink to="/mon-compte">{user.name}</NavLink>
           <button className="link" onClick={logout}>Se déconnecter</button>
         </div>
       </header>
@@ -46,8 +48,11 @@ function Layout() {
 // Zone protégée : connexion obligatoire, puis rôle autorisé (sinon retour à l'accueil de son rôle).
 function Guard({ roles }) {
   const { user, loading } = useAuth();
+  const location = useLocation();
   if (loading) return <p className="center muted">Chargement…</p>;
   if (!user) return <Navigate to="/connexion" replace />;
+  // Mot de passe provisoire : la seule page accessible est « Mon compte ».
+  if (user.mustChangePassword && location.pathname !== "/mon-compte") return <Navigate to="/mon-compte" replace />;
   if (!roles.includes(user.role)) return <Navigate to={HOME[user.role]} replace />;
   return <Layout />;
 }
@@ -57,6 +62,10 @@ export default function App() {
   return (
     <Routes>
       <Route path="/connexion" element={loading ? null : user ? <Navigate to={HOME[user.role]} replace /> : <AuthPage />} />
+
+      <Route element={<Guard roles={ALL_ROLES} />}>
+        <Route path="/mon-compte" element={<Account />} />
+      </Route>
 
       <Route element={<Guard roles={["patient"]} />}>
         <Route path="/rechercher" element={<Search />} />
