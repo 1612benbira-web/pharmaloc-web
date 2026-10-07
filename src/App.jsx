@@ -15,6 +15,7 @@ import AdminMedicines from "./pages/AdminMedicines.jsx";
 import AdminPharmacies from "./pages/AdminPharmacies.jsx";
 import AdminUsers from "./pages/AdminUsers.jsx";
 import AdminPayments from "./pages/AdminPayments.jsx";
+import AdminAudit from "./pages/AdminAudit.jsx";
 import "./orders.css";
 
 // Page d'accueil de chaque rôle.
@@ -92,6 +93,7 @@ export default function App() {
           <Route path="/admin/pharmacies" element={<AdminPharmacies />} />
           <Route path="/admin/comptes" element={<AdminUsers />} />
           <Route path="/admin/paiements" element={<AdminPayments />} />
+          <Route path="/admin/journal" element={<AdminAudit />} />
         </Route>
       </Route>
 
