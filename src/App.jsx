@@ -1,6 +1,8 @@
 import { Navigate, NavLink, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { useAuth } from "./auth.jsx";
 import AuthPage from "./pages/AuthPage.jsx";
+import ForgotPassword from "./pages/ForgotPassword.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
 import Account from "./pages/Account.jsx";
 import Search from "./pages/Search.jsx";
 import Availability from "./pages/Availability.jsx";
@@ -10,6 +12,8 @@ import Deliveries from "./pages/Deliveries.jsx";
 import PharmacyLayout from "./pages/PharmacyLayout.jsx";
 import PharmacyOrders from "./pages/PharmacyOrders.jsx";
 import PharmacyStocks from "./pages/PharmacyStocks.jsx";
+import PharmacyStats from "./pages/PharmacyStats.jsx";
+import PharmacyMedicines from "./pages/PharmacyMedicines.jsx";
 import AdminLayout from "./pages/AdminLayout.jsx";
 import AdminMedicines from "./pages/AdminMedicines.jsx";
 import AdminPharmacies from "./pages/AdminPharmacies.jsx";
@@ -65,6 +69,9 @@ export default function App() {
     <Routes>
       <Route path="/connexion" element={loading ? null : user ? <Navigate to={HOME[user.role]} replace /> : <AuthPage />} />
 
+      <Route path="/mot-de-passe-oublie" element={<ForgotPassword />} />
+      <Route path="/reinitialiser" element={<ResetPassword />} />
+
       <Route element={<Guard roles={ALL_ROLES} />}>
         <Route path="/mon-compte" element={<Account />} />
       </Route>
@@ -80,6 +87,8 @@ export default function App() {
         <Route element={<PharmacyLayout />}>
           <Route path="/pharmacie" element={<PharmacyOrders />} />
           <Route path="/pharmacie/stocks" element={<PharmacyStocks />} />
+          <Route path="/pharmacie/statistiques" element={<PharmacyStats />} />
+          <Route path="/pharmacie/medicaments" element={<PharmacyMedicines />} />
         </Route>
       </Route>
 

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../auth.jsx";
 import { errorText } from "../api.js";
 
@@ -50,6 +51,8 @@ export default function AuthPage() {
           {busy ? "Un instant…" : isLogin ? "Se connecter" : "Créer mon compte"}
         </button>
       </form>
+
+      {isLogin && <p><Link to="/mot-de-passe-oublie">Mot de passe oublié ?</Link></p>}
 
       <button className="link" onClick={() => { setMode(isLogin ? "register" : "login"); setError(""); }}>
         {isLogin ? "Pas encore de compte ? Créer un compte" : "Déjà un compte ? Se connecter"}
